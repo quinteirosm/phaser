@@ -67,7 +67,7 @@
       bases.create(0, 1090, 'ground').setScale(11).refreshBody();
 
       //  Now let's create some ledges
-      platforms.create(600, 832, 'ground');
+      platforms.create(600, 832, 'ground').setData(1);
       platforms.create(50, 732, 'ground');
       platforms.create(600, 652, 'ground');
       platforms.create(200, 550, 'ground').setScale(.1).refreshBody();
@@ -153,8 +153,8 @@
     }
 
     function getPoint(player, platform) {
-      if(platform.val===count){
-        score += 10;
+      if(this.getData===count.val){
+        score += 1;
         count += 1;
         scoreText.setText('Score: ' + score);
       }}
