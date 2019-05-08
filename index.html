@@ -40,7 +40,7 @@
     var score = 0;
     var scoreText;
     var gameOver = false;
-
+    var count = 1;
     var game = new Phaser.Game(config);
 
     function preload() {
@@ -75,7 +75,6 @@
       platforms.create(490, 370, 'ground').setScale(.1).refreshBody();
       platforms.create(35, 290, 'ground');
       doors.create(100, 235, 'door').setScale(.05).refreshBody();
-
       // The player and its settings
       player = this.physics.add.sprite(100, 815, 'character');
 
@@ -154,19 +153,24 @@
     }
 
     function getPoint(player, platform) {
-      score += 10;
-      scoreText.setText('Score: ' + score);
-    }
+      if(platform.val===count){
+        score += 10;
+        count += 1;
+        scoreText.setText('Score: ' + score);
+      }}
 
-    function win(player, door) {
-      this.physics.pause();
+      function win(player, door) {
+        this.physics.pause();
 
-      player.setTint(0xff0000);
+        scoreText = this.add.text(250, 0, 'Gagné!', {
+          fontSize: '32px',
+          fill: '#000'
+        });
 
-      player.anims.play('turn');
+        player.anims.play('turn');
 
-      gameOver = true;
-    }
+        gameOver = true;
+      }
   </script>
 
 </body>
