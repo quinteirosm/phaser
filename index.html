@@ -54,11 +54,12 @@ function create ()
     this.add.image(600, 300, 'sky').setScale(3);
 
     //  The platforms group contains the ground and the 2 ledges we can jump on
+    bases = this.physics.add.staticGroup();
     platforms = this.physics.add.staticGroup();
 
     //  Here we create the ground.
     //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-    platforms.create(0, 1090, 'ground').setScale(11).refreshBody();
+    bases.create(0, 1090, 'ground').setScale(11).refreshBody();
 
     //  Now let's create some ledges
     platforms.create(600, 832, 'ground');
@@ -97,8 +98,9 @@ function create ()
     cursors = this.input.keyboard.createCursorKeys();
 
     //  The score
-    scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+    scoreText = this.add.text(16, player.y, 'score: 0', { fontSize: '32px', fill: '#000' });
 
+    this.physics.add.collider(player, bases);
     this.physics.add.collider(player, platforms);
 }
 
@@ -133,6 +135,7 @@ function update ()
         player.setVelocityY(-320);
     }
     this.cameras.main.scrollY = player.y-650;﻿
+
 }
 
 </script>
