@@ -79,7 +79,7 @@
       player = this.physics.add.sprite(10, 815, 'character');
 
       // Définition des propriétés physiques du personnage
-      player.setCollideWorldBounds(true);
+      player.setCollideWorldBounds(false);
 
       // Définition des animations du personnage
       // Définition de l'animation quand on va à gauche
@@ -139,11 +139,11 @@
 
       // Définition de la vitesse de déplacement
       if (cursors.left.isDown) {
-        player.setVelocityX(-320);
+        player.setVelocityX(-350);
 
         player.anims.play('left', true);
       } else if (cursors.right.isDown) {
-        player.setVelocityX(320);
+        player.setVelocityX(350);
 
         player.anims.play('right', true);
       } else {
@@ -165,7 +165,7 @@
       score += 1;
       scorer.disableBody(true, true);
 
-      var x = Phaser.Math.Between(0, 12)*50;
+      var x = Phaser.Math.Between(1, 11)*50;
       platforms.create(x, player.y-50, 'ground').setScale(.3).refreshBody();
       scorers.create(x, player.y-51, 'ground').setScale(.3).refreshBody().alpha =0;
 
