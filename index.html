@@ -14,6 +14,7 @@
 
 <body>
   <script type="text/javascript">
+    // variable de configurations de la scène (API)
     var config = {
       type: Phaser.AUTO,
       width: 600,
@@ -34,6 +35,7 @@
       },
     };
 
+    //déclaration des variables
     var player;
     var platforms;
     var cursors;
@@ -53,20 +55,20 @@
       });
     }
 
+    // Création des éléments visuels
     function create() {
-      //  A simple background for our game
+      // Définition du background
       this.add.image(600, 300, 'sky').setScale(3);
 
-      //  The platforms group contains the ground and the 2 ledges we can jump on
+      // Définition des groupes
       bases = this.physics.add.staticGroup();
       platforms = this.physics.add.staticGroup();
       doors = this.physics.add.staticGroup();
 
-      //  Here we create the ground.
-      //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
+      // Création du "sol"
       bases.create(0, 1090, 'ground').setScale(11).refreshBody();
 
-      //  Now let's create some ledges
+      //  Création des plateformes
       platforms.create(600, 832, 'ground').setData(1);
       platforms.create(50, 732, 'ground');
       platforms.create(600, 652, 'ground');
@@ -74,15 +76,19 @@
       platforms.create(500, 450, 'ground').setScale(.1).refreshBody();
       platforms.create(490, 370, 'ground').setScale(.1).refreshBody();
       platforms.create(35, 290, 'ground');
+
+      // Création de la porte
       doors.create(100, 235, 'door').setScale(.05).refreshBody();
-      // The player and its settings
+
+      // Création du personnage
       player = this.physics.add.sprite(100, 815, 'character');
 
-      //  Player physics properties. Give the little guy a slight bounce.
+      // Définition des propriétés physiques du personnage
       player.setBounce(0.2);
       player.setCollideWorldBounds(true);
 
-      //  Our player animations, turning, walking left and walking right.
+      // Définition des animations du personnage
+      // Définition de l'animation quand on va à gauche
       this.anims.create({
         key: 'left',
         frames: this.anims.generateFrameNumbers('character', {
@@ -92,7 +98,6 @@
         frameRate: 10,
         repeat: -1
       });
-
       this.anims.create({
         key: 'turn',
         frames: this.anims.generateFrameNumbers('character', {
@@ -101,7 +106,6 @@
         }),
         frameRate: -1
       });
-
       this.anims.create({
         key: 'right',
         frames: this.anims.generateFrameNumbers('character', {
@@ -115,22 +119,21 @@
       //  Input Events
       cursors = this.input.keyboard.createCursorKeys();
 
-      //  The score
+      // Mise en place du texte de score
       scoreText = this.add.text(16, 100, 'score: 0', {
         fontSize: '32px',
         fill: '#000'
       });
 
+      // Définition des collisions entre les objets
       this.physics.add.collider(player, bases);
       this.physics.add.overlap(player, doors, win, null, this);
       this.physics.add.collider(player, platforms, getPoint, null, this);
     }
 
     function update() {
-      if (gameOver) {
-        return;
-      }
 
+      // Définition de la vitesse de déplacement
       if (cursors.left.isDown) {
         player.setVelocityX(-320);
 
@@ -148,10 +151,13 @@
       if (cursors.up.isDown && player.body.touching.down) {
         player.setVelocityY(-320);
       }
+
+      // Définition de la propriété pour avoir une caméra qui suit le personnage
       this.cameras.main.scrollY = player.y - 650;
 
     }
 
+    // Définition de la fonction de score
     function getPoint(player, platform) {
       if(this.getData===count.val){
         score += 1;
@@ -159,6 +165,7 @@
         scoreText.setText('Score: ' + score +"!");
       }}
 
+      // Définition de la fonction quand on atteint la porte
       function win(player, door) {
         this.physics.pause();
 
