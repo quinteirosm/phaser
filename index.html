@@ -50,7 +50,7 @@
       this.load.image('door', 'assets/door.png');
       this.load.spritesheet('character', 'assets/character.png', {
         frameWidth: 50,
-        frameHeight: 37
+        frameHeight: 37,
       });
     }
 
@@ -75,7 +75,7 @@
       platforms.create(200, 550, 'ground').setScale(.5).refreshBody();
       platforms.create(500, 450, 'ground').setScale(.1).refreshBody();
       platforms.create(490, 370, 'ground').setScale(.1).refreshBody();
-      platforms.create(35, 320, 'ground');
+      platforms.create(35, 325, 'ground');
 
       // Création des scorers
       scorers.create(500, 825, 'ground').setScale(.5).refreshBody().alpha=0;
@@ -84,7 +84,7 @@
       scorers.create(200, 545, 'ground').setScale(.5).refreshBody().alpha=0;
       scorers.create(500, 445, 'ground').setScale(.1).refreshBody().alpha=0;
       scorers.create(490, 365, 'ground').setScale(.1).refreshBody().alpha=0;
-      scorers.create(35, 315, 'ground').alpha=0;
+      scorers.create(35, 320, 'ground').alpha=0;
 
       // Création de la porte
       doors.create(100, 235, 'door').setScale(.05).refreshBody();
