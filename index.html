@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>Making your first Phaser 3 Game - Part 10</title>
+  <title>Jumping Hero</title>
   <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
   <style type="text/css">
     body {
@@ -36,64 +36,45 @@
     };
 
     //déclaration des variables
-    var player;
-    var platforms;
-    var cursors;
     var score = 0;
     var scoreText;
     var gameOver = false;
     var game = new Phaser.Game(config);
 
+    // Création des éléments à précharger-------------------------------------------------------------------------------------------
     function preload() {
       this.load.image('sky', 'assets/sky.png');
       this.load.image('ground', 'assets/platforms.png');
-      this.load.image('door', 'assets/door.png');
+      //this.load.image('door', 'assets/door.png');
       this.load.spritesheet('character', 'assets/character.png', {
         frameWidth: 50,
         frameHeight: 37,
       });
     }
 
-    // Création des éléments visuels
+    // Création des éléments visuels-------------------------------------------------------------------------------------------
     function create() {
-      // Définition du background
-      this.add.image(600, 300, 'sky').setScale(3);
-
       // Définition des groupes
       bases = this.physics.add.staticGroup();
       platforms = this.physics.add.staticGroup();
-      doors = this.physics.add.staticGroup();
       scorers = this.physics.add.staticGroup();
+
+      // Définition du background
+      this.add.image(600, 300, 'sky').setScale(3);
 
       // Création du "sol"
       bases.create(0, 1100, 'ground').setScale(4).refreshBody();
 
-      //  Création des plateformes
-      platforms.create(500, 830, 'ground').setScale(.5).refreshBody();
-      platforms.create(100, 730, 'ground').setScale(.5).refreshBody();
-      platforms.create(450, 650, 'ground').setScale(.5).refreshBody();
-      platforms.create(200, 550, 'ground').setScale(.5).refreshBody();
-      platforms.create(500, 450, 'ground').setScale(.1).refreshBody();
-      platforms.create(490, 370, 'ground').setScale(.1).refreshBody();
-      platforms.create(35, 325, 'ground');
+      //  Création de la plateforme initiale
+      platforms.create(400, 830, 'ground').setScale(.3).refreshBody();
 
-      // Création des scorers
-      scorers.create(500, 825, 'ground').setScale(.5).refreshBody().alpha=0;
-      scorers.create(100, 725, 'ground').setScale(.5).refreshBody().alpha=0;
-      scorers.create(450, 645, 'ground').setScale(.5).refreshBody().alpha=0;
-      scorers.create(200, 545, 'ground').setScale(.5).refreshBody().alpha=0;
-      scorers.create(500, 445, 'ground').setScale(.1).refreshBody().alpha=0;
-      scorers.create(490, 365, 'ground').setScale(.1).refreshBody().alpha=0;
-      scorers.create(35, 320, 'ground').alpha=0;
-
-      // Création de la porte
-      doors.create(100, 235, 'door').setScale(.05).refreshBody();
+      // Création du scorer initial
+      scorers.create(400, 825, 'ground').setScale(.3).refreshBody().alpha = 0;
 
       // Création du personnage
-      player = this.physics.add.sprite(100, 815, 'character');
+      player = this.physics.add.sprite(10, 815, 'character');
 
       // Définition des propriétés physiques du personnage
-      player.setBounce(0.2);
       player.setCollideWorldBounds(true);
 
       // Définition des animations du personnage
@@ -101,8 +82,8 @@
       this.anims.create({
         key: 'left',
         frames: this.anims.generateFrameNumbers('character', {
-          start: 20,
-          end: 30
+          start: 8,
+          end: 13
         }),
         frameRate: 10,
         repeat: -1
@@ -129,7 +110,7 @@
       cursors = this.input.keyboard.createCursorKeys();
 
       // Mise en place du texte de score
-      scoreText = this.add.text(16, 100, 'score: 0', {
+      scoreText = this.add.text(30, 300, 'score: 0', {
         fontSize: '32px',
         fill: '#000'
       });
@@ -137,10 +118,10 @@
       // Définition des collisions entre les objets
       this.physics.add.collider(player, bases);
       this.physics.add.collider(player, platforms);
-      this.physics.add.overlap(player, scorers, getScored, null, this);
-      this.physics.add.overlap(player, doors, win, null, this);
+      this.physics.add.overlap(player, scorers, getScored);
     }
 
+    // Création des éléments à mettre à jour-------------------------------------------------------------------------------------------
     function update() {
 
       // Définition de la vitesse de déplacement
@@ -164,29 +145,33 @@
 
       // Définition de la propriété pour avoir une caméra qui suit le personnage
       this.cameras.main.scrollY = player.y - 650;
-
     }
 
     // Définition de la fonction de score
-    function getScored(player, scorers) {
-        score += 1;
-        scorers.disableBody(true, true);
-        scoreText.setText('Score: ' + score +"!");
-      }
+    function getScored(player, scorer){
+      score += 1;
+      scorer.disableBody(true, true);
 
-      // Définition de la fonction quand on atteint la porte
-      function win(player, door) {
-        this.physics.pause();
+      var x = Phaser.Math.Between(0, 12)*50;
+      platforms.create(x, player.y-50, 'ground').setScale(.3).refreshBody();
+      scorers.create(x, player.y-51, 'ground').setScale(.3).refreshBody().alpha =0;
 
-        scoreText = this.add.text(250, 0, 'Bravo!', {
-          fontSize: '32px',
-          fill: '#000'
-        });
+      scoreText.setText('Score: ' + score + "!")
+    };
 
-        player.anims.play('turn');
+    // Définition de la fonction quand on atteint la porte
+    /*function win(player, door) {
+      this.physics.pause();
 
-        gameOver = true;
-      }
+      scoreText = this.add.text(250, 0, 'Bravo!', {
+        fontSize: '32px',
+        fill: '#000'
+      });
+
+      player.anims.play('turn');
+
+      gameOver = true;
+    }*/
   </script>
 
 </body>
